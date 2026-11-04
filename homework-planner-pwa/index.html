@@ -1,0 +1,202 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Homework Planner</title>
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="การบ้าน">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="theme-color" content="#1b2a41">
+<style>
+:root{--bg:#eef2f7;--paper:#fff;--ink:#1b2a41;--mute:#6b7a90;--line:#d5dde8;--hi:#ffd93d;--late:#d64545;--ok:#2f9e6e;
+--sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root{--bg:#0f1826;--paper:#18263a;--ink:#eaf0f8;--mute:#8d9bb0;--line:#2a3b54;--late:#ff7b7b;--ok:#52d1a0}}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,"Sukhumvit Set","Thonburi","Noto Sans Thai",system-ui,sans-serif}
+body{padding:calc(var(--sat) + 14px) 16px calc(var(--sab) + 96px);max-width:560px;margin:0 auto;min-height:100vh}
+button,input{font:inherit;color:inherit}
+button{border:0;background:none;cursor:pointer}
+header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
+h1{font-size:26px;line-height:1.25;margin:0;font-weight:700}
+.sub{color:var(--mute);margin:2px 0 0}
+.icon-btn{width:40px;height:40px;border-radius:50%;background:var(--paper);border:1px solid var(--line);font-size:18px}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:14px}
+.d{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 0 6px;text-align:center;position:relative}
+.d small{display:block;color:var(--mute);font-size:12px}
+.d b{display:block;font-size:18px;line-height:1.3}
+.d i{display:block;font-style:normal;font-size:12px;height:18px;color:var(--mute)}
+.d.has i{color:var(--ink);font-weight:700}
+.d.today::after{content:"";position:absolute;left:22%;right:22%;bottom:4px;height:4px;border-radius:2px;background:var(--hi)}
+.d.sel{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.d.sel small,.d.sel i{color:inherit}
+.tabs{display:flex;gap:8px;margin-bottom:6px}
+.tab{padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
+.tab[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.grp{margin-top:18px}
+.grp h2{font-size:15px;margin:0 0 6px;display:flex;gap:8px;align-items:baseline}
+.grp h2 span{color:var(--mute);font-weight:400}
+.grp.late h2{color:var(--late)}
+.item{display:flex;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
+.chk{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--mute);display:grid;place-items:center;font-size:16px;color:transparent}
+.item.done .chk{background:var(--ok);border-color:var(--ok);color:#fff}
+.body{flex:1;text-align:left;min-width:0}
+.t{display:block;overflow-wrap:anywhere}
+.item.done .t{text-decoration:line-through;color:var(--mute)}
+.tag{display:inline-block;margin-top:2px;font-size:13px;padding:0 9px;border-radius:999px;color:#fff}
+.empty{text-align:center;color:var(--mute);padding:48px 12px}
+.fab{position:fixed;right:20px;bottom:calc(var(--sab) + 20px);width:60px;height:60px;border-radius:50%;background:var(--hi);color:#1b2a41;font-size:32px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
+.ov{position:fixed;inset:0;background:rgba(10,18,30,.5);display:none;align-items:flex-end;z-index:5}
+.ov.open{display:flex}
+.sheet{width:100%;max-width:560px;margin:0 auto;background:var(--paper);border-radius:22px 22px 0 0;padding:20px 16px calc(var(--sab) + 18px)}
+.sheet h3{margin:0 0 12px;font-size:18px}
+label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
+input,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:16px}
+textarea{height:120px;resize:none;font-size:13px}
+.row{display:flex;gap:8px;margin-top:16px}
+.btn{flex:1;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
+.btn.main{background:var(--ink);color:var(--paper);border-color:var(--ink);flex:2}
+.btn.del{color:var(--late)}
+:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+</style>
+</head>
+<body>
+<header>
+  <div><h1 id="date"></h1><p class="sub" id="sum"></p></div>
+  <button class="icon-btn" id="bk" aria-label="สำรองข้อมูล">⇅</button>
+</header>
+<div class="week" id="week"></div>
+<div class="tabs">
+  <button class="tab" data-v="todo">ค้างอยู่</button>
+  <button class="tab" data-v="done">เสร็จแล้ว</button>
+</div>
+<main id="list"></main>
+<button class="fab" id="add" aria-label="เพิ่มการบ้าน">+</button>
+
+<div class="ov" id="ov-task"><form class="sheet" id="form">
+  <h3 id="ft">เพิ่มการบ้าน</h3>
+  <label for="f-title">งาน</label><input id="f-title" required maxlength="120" placeholder="เช่น แบบฝึกหัดบทที่ 3">
+  <label for="f-sub">วิชา</label><input id="f-sub" list="subs" maxlength="30" placeholder="เช่น คณิตศาสตร์">
+  <datalist id="subs"></datalist>
+  <label for="f-due">กำหนดส่ง</label><input id="f-due" type="date" required>
+  <div class="row"><button type="button" class="btn del" id="f-del">ลบ</button><button type="button" class="btn" id="f-cancel">ยกเลิก</button><button class="btn main">บันทึก</button></div>
+</form></div>
+
+<div class="ov" id="ov-bk"><div class="sheet">
+  <h3>สำรองข้อมูล</h3>
+  <p class="sub">ข้อมูลเก็บอยู่ในเครื่องนี้เท่านั้น คัดลอกเก็บไว้เป็นระยะ หรือวางข้อมูลเก่าเพื่อนำเข้า</p>
+  <textarea id="bk-text" aria-label="ข้อมูลสำรอง"></textarea>
+  <div class="row"><button class="btn" id="bk-close">ปิด</button><button class="btn" id="bk-copy">คัดลอก</button><button class="btn main" id="bk-imp">นำเข้า</button></div>
+</div></div>
+
+<script>
+const $=s=>document.querySelector(s), KEY='hw-planner-v1';
+const DAYS=['อา','จ','อ','พ','พฤ','ศ','ส'],FULL=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
+MON=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+let tasks=load(),view='todo',day=null,editId=null;
+function load(){try{const a=JSON.parse(localStorage.getItem(KEY));return Array.isArray(a)?a:[]}catch{return[]}}
+function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch{}}
+const pad=n=>String(n).padStart(2,'0');
+const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+const dt=s=>new Date(s+'T00:00:00');
+const today=()=>iso(new Date());
+const plus=(s,n)=>{const d=dt(s);d.setDate(d.getDate()+n);return iso(d)};
+const fmt=s=>{const d=dt(s);return `${FULL[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`};
+const hue=s=>{let h=0;for(const c of s)h=(h*31+c.codePointAt(0))%360;return h};
+
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+
+function render(){
+  const t=today(), open=tasks.filter(x=>!x.done);
+  $('#date').textContent=fmt(t);
+  const late=open.filter(x=>x.due<t).length;
+  $('#sum').textContent=open.length?`ค้างอยู่ ${open.length} งาน`+(late?` เลยกำหนด ${late}`:''):'ไม่มีงานค้าง';
+  const wk=$('#week');wk.replaceChildren();
+  for(let i=0;i<7;i++){
+    const s=plus(t,i),n=open.filter(x=>x.due===s).length,d=dt(s);
+    const b=el('button','d'+(i==0?' today':'')+(n?' has':'')+(day===s?' sel':''));
+    b.append(el('small',0,DAYS[d.getDay()]),el('b',0,d.getDate()),el('i',0,n||''));
+    b.onclick=()=>{day=day===s?null:s;render()};
+    wk.append(b);
+  }
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===view));
+  let rows=tasks.filter(x=>view==='done'?x.done:!x.done);
+  if(day)rows=rows.filter(x=>x.due===day);
+  rows.sort((a,b)=>view==='done'?b.due.localeCompare(a.due):a.due.localeCompare(b.due));
+  const list=$('#list');list.replaceChildren();
+  if(!rows.length){list.append(el('div','empty',view==='done'?'ยังไม่มีงานที่ทำเสร็จ':day?'วันนี้ไม่มีงานส่ง กด + เพื่อเพิ่ม':'ยังไม่มีการบ้าน กด + เพื่อเพิ่มงานแรก'));return}
+  const groups=[];
+  for(const r of rows){
+    const key=view==='done'?'done':r.due<t?'late':r.due;
+    let g=groups.find(x=>x.key===key);
+    if(!g){g={key,items:[]};groups.push(g)}
+    g.items.push(r);
+  }
+  for(const g of groups){
+    const sec=el('section','grp'+(g.key==='late'?' late':'')),h=el('h2');
+    if(g.key==='done')h.append('ทำเสร็จแล้ว');
+    else if(g.key==='late')h.append('เลยกำหนด');
+    else{const nm=g.key===t?'วันนี้':g.key===plus(t,1)?'พรุ่งนี้':fmt(g.key);h.append(nm);if(nm!==fmt(g.key))h.append(el('span',0,fmt(g.key)))}
+    sec.append(h);
+    for(const r of g.items){
+      const it=el('div','item'+(r.done?' done':''));
+      const c=el('button','chk','✓');c.setAttribute('aria-label',r.done?'ยกเลิกเสร็จ':'ทำเสร็จแล้ว');
+      c.onclick=()=>{r.done=!r.done;save();render()};
+      const b=el('button','body');b.append(el('span','t',r.title));
+      if(r.subject){const tg=el('span','tag',r.subject);tg.style.background=`hsl(${hue(r.subject)} 55% 40%)`;b.append(tg)}
+      if(g.key==='late'||g.key==='done')b.append(el('span','sub',' '+fmt(r.due)));
+      b.onclick=()=>openTask(r.id);
+      it.append(c,b);sec.append(it);
+    }
+    list.append(sec);
+  }
+}
+
+function openTask(id){
+  editId=id;const r=tasks.find(x=>x.id===id);
+  $('#ft').textContent=r?'แก้ไขการบ้าน':'เพิ่มการบ้าน';
+  $('#f-title').value=r?r.title:'';$('#f-sub').value=r?r.subject:'';
+  $('#f-due').value=r?r.due:(day||plus(today(),1));
+  $('#f-del').style.display=r?'':'none';
+  const subs=[...new Set(tasks.map(x=>x.subject).filter(Boolean))];
+  $('#subs').replaceChildren(...subs.map(s=>{const o=el('option');o.value=s;return o}));
+  $('#ov-task').classList.add('open');
+  if(!r)setTimeout(()=>$('#f-title').focus(),50);
+}
+const closeAll=()=>document.querySelectorAll('.ov').forEach(o=>o.classList.remove('open'));
+$('#add').onclick=()=>openTask(null);
+$('#f-cancel').onclick=closeAll;
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeAll()}));
+$('#form').onsubmit=e=>{
+  e.preventDefault();
+  const v={title:$('#f-title').value.trim(),subject:$('#f-sub').value.trim(),due:$('#f-due').value};
+  if(!v.title||!v.due)return;
+  const r=tasks.find(x=>x.id===editId);
+  if(r)Object.assign(r,v);else tasks.push({id:Date.now().toString(36),done:false,...v});
+  save();closeAll();render();
+};
+$('#f-del').onclick=()=>{if(confirm('ลบการบ้านนี้?')){tasks=tasks.filter(x=>x.id!==editId);save();closeAll();render()}};
+document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
+
+$('#bk').onclick=()=>{$('#bk-text').value=JSON.stringify(tasks);$('#ov-bk').classList.add('open')};
+$('#bk-close').onclick=closeAll;
+$('#bk-copy').onclick=async()=>{const t=$('#bk-text');t.select();try{await navigator.clipboard.writeText(t.value);$('#bk-copy').textContent='คัดลอกแล้ว'}catch{document.execCommand('copy')}};
+$('#bk-imp').onclick=()=>{
+  try{
+    const a=JSON.parse($('#bk-text').value);
+    if(!Array.isArray(a)||a.some(x=>!x||!x.title||!x.due))throw 0;
+    if(!confirm(`นำเข้า ${a.length} งาน และแทนที่ข้อมูลปัจจุบัน?`))return;
+    tasks=a.map(x=>({id:x.id||Date.now().toString(36)+Math.random().toString(36).slice(2,5),title:String(x.title),subject:String(x.subject||''),due:String(x.due),done:!!x.done}));
+    save();closeAll();render();
+  }catch{alert('ข้อมูลไม่ถูกต้อง ลองคัดลอกจากปุ่ม "คัดลอก" ของเครื่องเดิมอีกครั้ง')}
+};
+
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
+render();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+</script>
+</body>
+</html>
