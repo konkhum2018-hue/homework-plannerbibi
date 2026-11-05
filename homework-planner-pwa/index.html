@@ -9,193 +9,351 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="การบ้าน">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="theme-color" content="#1b2a41">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="theme-color" content="#ffffff">
 <style>
-:root{--bg:#eef2f7;--paper:#fff;--ink:#1b2a41;--mute:#6b7a90;--line:#d5dde8;--hi:#ffd93d;--late:#d64545;--ok:#2f9e6e;
+:root{color-scheme:light;--bg:#fff;--paper:#fff;--ink:#111;--mute:#757575;--line:#e6e6e6;--mar:#f26aa3;--hi:#d8f36b;--hit:#111;--late:#d6336c;
 --sat:env(safe-area-inset-top,0px);--sab:env(safe-area-inset-bottom,0px)}
-@media(prefers-color-scheme:dark){:root{--bg:#0f1826;--paper:#18263a;--ink:#eaf0f8;--mute:#8d9bb0;--line:#2a3b54;--late:#ff7b7b;--ok:#52d1a0}}
 *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
 html,body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 -apple-system,"Sukhumvit Set","Thonburi","Noto Sans Thai",system-ui,sans-serif}
-body{padding:calc(var(--sat) + 14px) 16px calc(var(--sab) + 96px);max-width:560px;margin:0 auto;min-height:100vh}
+body{padding:calc(var(--sat) + 18px) 0 calc(var(--sab) + 110px);max-width:560px;margin:0 auto;min-height:100vh}
 button,input{font:inherit;color:inherit}
-button{border:0;background:none;cursor:pointer}
-header{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:14px}
-h1{font-size:26px;line-height:1.25;margin:0;font-weight:700}
+button{border:0;background:none;cursor:pointer;padding:0}
+header{display:flex;justify-content:space-between;align-items:flex-start;padding:0 20px;margin-bottom:12px}
+h1{font-size:34px;line-height:1.2;margin:0;font-weight:800;letter-spacing:-.01em}
 .sub{color:var(--mute);margin:2px 0 0}
-.icon-btn{width:40px;height:40px;border-radius:50%;background:var(--paper);border:1px solid var(--line);font-size:18px}
-.week{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;margin-bottom:14px}
-.d{background:var(--paper);border:1px solid var(--line);border-radius:12px;padding:8px 0 6px;text-align:center;position:relative}
+.icon-btn{width:40px;height:40px;border-radius:50%;border:2px solid var(--ink);font-size:18px;font-weight:700}
+.week{display:grid;grid-template-columns:repeat(7,1fr);gap:2px;padding:0 10px;margin-bottom:8px}
+.d{border-radius:16px;padding:8px 0 6px;text-align:center}
 .d small{display:block;color:var(--mute);font-size:12px}
-.d b{display:block;font-size:18px;line-height:1.3}
+.d b{display:inline-block;min-width:32px;font-size:20px;line-height:1.4;border-radius:10px}
 .d i{display:block;font-style:normal;font-size:12px;height:18px;color:var(--mute)}
-.d.has i{color:var(--ink);font-weight:700}
-.d.today::after{content:"";position:absolute;left:22%;right:22%;bottom:4px;height:4px;border-radius:2px;background:var(--hi)}
-.d.sel{background:var(--ink);color:var(--paper);border-color:var(--ink)}
+.d.has i{color:var(--mar);font-weight:800}
+.d.today b{background:var(--hi);color:var(--hit)}
+.d.sel{background:var(--ink);color:var(--bg)}
 .d.sel small,.d.sel i{color:inherit}
-.tabs{display:flex;gap:8px;margin-bottom:6px}
-.tab{padding:6px 14px;border-radius:999px;border:1px solid var(--line);background:var(--paper)}
-.tab[aria-pressed=true]{background:var(--ink);color:var(--paper);border-color:var(--ink)}
-.grp{margin-top:18px}
-.grp h2{font-size:15px;margin:0 0 6px;display:flex;gap:8px;align-items:baseline}
+.tabs{display:flex;gap:22px;padding:0 20px;border-bottom:1px solid var(--line)}
+.tab{padding:8px 0;color:var(--mute);border-bottom:3px solid transparent;margin-bottom:-1px}
+.tab[aria-pressed=true]{color:var(--ink);font-weight:700;border-color:var(--ink)}
+main{position:relative}
+main::before{content:"";position:absolute;left:46px;top:0;bottom:0;width:2px;background:var(--mar);opacity:.5}
+.grp{margin-top:22px}
+.grp h2{font-size:15px;margin:0 0 6px;padding-left:14px;display:flex;gap:10px;align-items:center}
 .grp h2 span{color:var(--mute);font-weight:400}
-.grp.late h2{color:var(--late)}
-.item{display:flex;gap:12px;align-items:center;background:var(--paper);border:1px solid var(--line);border-radius:14px;padding:10px 12px;margin-bottom:8px}
-.chk{flex:none;width:28px;height:28px;border-radius:50%;border:2px solid var(--mute);display:grid;place-items:center;font-size:16px;color:transparent}
-.item.done .chk{background:var(--ok);border-color:var(--ok);color:#fff}
-.body{flex:1;text-align:left;min-width:0}
-.t{display:block;overflow-wrap:anywhere}
-.item.done .t{text-decoration:line-through;color:var(--mute)}
-.tag{display:inline-block;margin-top:2px;font-size:13px;padding:0 9px;border-radius:999px;color:#fff}
-.empty{text-align:center;color:var(--mute);padding:48px 12px}
-.fab{position:fixed;right:20px;bottom:calc(var(--sab) + 20px);width:60px;height:60px;border-radius:50%;background:var(--hi);color:#1b2a41;font-size:32px;box-shadow:0 4px 14px rgba(0,0,0,.25)}
-.ov{position:fixed;inset:0;background:rgba(10,18,30,.5);display:none;align-items:flex-end;z-index:5}
+.item{display:grid;grid-template-columns:46px 1fr;align-items:center;border-bottom:1px solid var(--line);padding:6px 20px 6px 0}
+.chk{justify-self:center;width:24px;height:24px;border-radius:50%;border:2px solid var(--ink);display:grid;place-items:center;font-size:14px;color:transparent;background:var(--bg)}
+.item.done .chk{background:var(--ink);color:var(--bg)}
+.body{text-align:left;min-width:0;padding:4px 0 4px 16px}
+.t{display:block;font-weight:600;font-size:17px;overflow-wrap:anywhere}
+.item.done .t{text-decoration:line-through;color:var(--mute);font-weight:400}
+.tag{font-size:14px;color:var(--mute)}
+.tag::before{content:"";display:inline-block;width:9px;height:9px;border-radius:50%;background:var(--c);margin-right:6px}
+.body .sub{font-size:14px}
+.empty{text-align:center;color:var(--mute);padding:56px 20px}
+.fab{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(var(--sab) + 20px);height:54px;padding:0 28px;border-radius:27px;background:var(--ink);color:var(--bg);font-weight:700;box-shadow:0 6px 18px rgba(37,34,74,.3)}
+.ov{position:fixed;inset:0;background:rgba(0,0,0,.5);display:none;align-items:flex-end;z-index:5}
 .ov.open{display:flex}
-.sheet{width:100%;max-width:560px;margin:0 auto;background:var(--paper);border-radius:22px 22px 0 0;padding:20px 16px calc(var(--sab) + 18px)}
-.sheet h3{margin:0 0 12px;font-size:18px}
-label{display:block;font-size:14px;color:var(--mute);margin:10px 0 4px}
-input,textarea{width:100%;padding:11px 12px;border-radius:12px;border:1px solid var(--line);background:var(--bg);font-size:16px}
-textarea{height:120px;resize:none;font-size:13px}
-.row{display:flex;gap:8px;margin-top:16px}
-.btn{flex:1;padding:12px;border-radius:12px;background:var(--bg);border:1px solid var(--line)}
-.btn.main{background:var(--ink);color:var(--paper);border-color:var(--ink);flex:2}
-.btn.del{color:var(--late)}
-:focus-visible{outline:3px solid var(--hi);outline-offset:2px}
+.sheet{width:100%;max-width:560px;margin:0 auto;background:var(--paper);max-height:92vh;overflow-y:auto;border-radius:26px 26px 0 0;padding:22px 20px calc(var(--sab) + 18px)}
+.sheet h3{margin:0 0 6px;font-size:20px}
+label{display:block;font-size:14px;color:var(--mute);margin:14px 0 0}
+input,textarea{width:100%;padding:8px 0;border:0;border-bottom:2px solid var(--line);border-radius:0;background:transparent;font-size:17px}
+input:focus,textarea:focus{outline:0;border-color:var(--ink)}
+textarea{height:120px;resize:none;font-size:13px;border:2px solid var(--line);border-radius:12px;padding:10px}
+.row{display:flex;gap:8px;margin-top:22px}
+.btn{flex:1;padding:12px;border-radius:999px;border:2px solid var(--ink);background:var(--ink);color:#fff}
+.btn.main{background:var(--ink);color:var(--bg);border-color:var(--ink);flex:2;font-weight:700}
+.btn.del{background:#fff;color:var(--late);border-color:var(--late)}
+.btn.ghost{background:#fff;color:var(--ink)}
+:focus-visible{outline:3px solid var(--ink);outline-offset:2px}
+.bn{margin:0 20px 10px;padding:10px 12px;border-radius:12px;background:var(--hi);color:var(--hit);font-size:15px;display:none}
+.bn.on{display:block}.bn button{font-weight:800;text-decoration:underline;margin-left:6px;color:inherit}
+.mnav{display:flex;justify-content:space-between;align-items:center;padding:10px 20px 2px}.mnav b{font-size:18px}.mnav button{font-size:26px;width:44px;height:38px}
+.cal{display:grid;grid-template-columns:repeat(7,1fr);padding:0 10px;gap:2px;text-align:center}
+.cal .h{color:var(--mute);font-size:12px;padding:6px 0}
+.cal .c{border-radius:14px;padding:4px 0;min-height:54px}
+.cal b{display:inline-block;min-width:30px;line-height:1.5;border-radius:9px;font-weight:600}
+.cal .today b{background:var(--hi);color:var(--hit)}.cal .sel{background:var(--ink);color:var(--bg)}
+.cal i{display:block;font-style:normal;font-size:11px;height:16px;line-height:16px;color:var(--mar)}
+.day{padding:0 20px;margin-top:14px}.day h2{margin:0 0 6px;font-size:15px}
+.day textarea{height:84px;font-size:15px;margin-top:8px}
+.thumbs{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:10px}
+.thumbs img{width:100%;aspect-ratio:1;object-fit:cover;border-radius:10px}
+.photo{display:block;text-align:center;margin-top:10px;cursor:pointer;flex:none}
+.soon{color:var(--late);font-weight:700}
+#ph-img{max-width:100%;max-height:68vh;border-radius:12px;display:block;margin:0 auto}
+.lab{position:relative;z-index:1;display:inline-block;padding:3px 14px;border-radius:999px;font-size:15px;font-weight:700;color:#25224a;background:#e4dcff;box-shadow:0 2px 0 rgba(37,34,74,.15)}
+.lab.today{background:var(--hi)}.lab.tom{background:#bfe3ff}.lab.late{background:#ffc9dc}.lab.ok{background:#c9f2dc}
+.cnt{color:var(--mute);font-size:13px;font-weight:400}
+.none{color:var(--mute);margin:0 0 8px}
 </style>
 </head>
 <body>
 <header>
   <div><h1 id="date"></h1><p class="sub" id="sum"></p></div>
-  <button class="icon-btn" id="bk" aria-label="สำรองข้อมูล">⇅</button>
+  <button class="icon-btn" id="bk" aria-label="ตั้งค่า">⋯</button>
 </header>
-<div class="week" id="week"></div>
+<div class="bn" id="bn"></div>
 <div class="tabs">
   <button class="tab" data-v="todo">ค้างอยู่</button>
+  <button class="tab" data-v="cal">ปฏิทิน</button>
   <button class="tab" data-v="done">เสร็จแล้ว</button>
 </div>
-<main id="list"></main>
-<button class="fab" id="add" aria-label="เพิ่มการบ้าน">+</button>
+<main id="main"></main>
+<button class="fab" id="add">+ จดงานใหม่</button>
 
 <div class="ov" id="ov-task"><form class="sheet" id="form">
   <h3 id="ft">เพิ่มการบ้าน</h3>
   <label for="f-title">งาน</label><input id="f-title" required maxlength="120" placeholder="เช่น แบบฝึกหัดบทที่ 3">
   <label for="f-sub">วิชา</label><input id="f-sub" list="subs" maxlength="30" placeholder="เช่น คณิตศาสตร์">
   <datalist id="subs"></datalist>
-  <label for="f-due">กำหนดส่ง</label><input id="f-due" type="date" required>
-  <div class="row"><button type="button" class="btn del" id="f-del">ลบ</button><button type="button" class="btn" id="f-cancel">ยกเลิก</button><button class="btn main">บันทึก</button></div>
+  <label for="f-due">วันที่ส่ง</label><input id="f-due" type="date" required>
+  <label for="f-time">เวลาส่ง</label><input id="f-time" type="time" required>
+  <div class="row"><button type="button" class="btn ghost" id="f-ics">เพิ่มลงปฏิทิน iPhone (เตือนแม้ปิดแอป)</button></div>
+  <label class="btn photo" id="f-pl">📷 แนบรูปกับงานนี้<input id="f-file" type="file" accept="image/*" multiple hidden></label>
+  <div class="thumbs" id="f-ph"></div>
+  <div class="row"><button type="button" class="btn del" id="f-del">ลบ</button><button type="button" class="btn ghost" id="f-cancel">ยกเลิก</button><button class="btn main">บันทึก</button></div>
 </form></div>
 
 <div class="ov" id="ov-bk"><div class="sheet">
-  <h3>สำรองข้อมูล</h3>
-  <p class="sub">ข้อมูลเก็บอยู่ในเครื่องนี้เท่านั้น คัดลอกเก็บไว้เป็นระยะ หรือวางข้อมูลเก่าเพื่อนำเข้า</p>
+  <h3>ตั้งค่า</h3>
+  <p class="sub">แอปเตือนอัตโนมัติ 3 วันก่อนส่ง และตอนถึงเวลาส่ง ขณะเปิดแอปอยู่ หากต้องการให้เตือนแม้ปิดแอป ให้เพิ่มงานลงปฏิทิน iPhone (ปฏิทินจะเตือนก่อน 3 วันและตอนถึงเวลาส่ง)</p>
+  <div class="row"><button class="btn" id="bk-notif">เปิดแจ้งเตือน</button><button class="btn" id="bk-cal">เพิ่มทุกงานที่ค้างลงปฏิทิน</button></div>
+  <label for="bk-text">สำรองข้อมูลงาน (ไม่รวมรูป)</label>
   <textarea id="bk-text" aria-label="ข้อมูลสำรอง"></textarea>
-  <div class="row"><button class="btn" id="bk-close">ปิด</button><button class="btn" id="bk-copy">คัดลอก</button><button class="btn main" id="bk-imp">นำเข้า</button></div>
+  <div class="row"><button class="btn ghost" id="bk-close">ปิด</button><button class="btn ghost" id="bk-copy">คัดลอก</button><button class="btn main" id="bk-imp">นำเข้า</button></div>
+</div></div>
+
+<div class="ov" id="ov-ph"><div class="sheet">
+  <img id="ph-img" alt="รูปโน้ต">
+  <div class="row"><button class="btn del" id="ph-del">ลบรูป</button><button class="btn main" id="ph-close">ปิด</button></div>
 </div></div>
 
 <script>
-const $=s=>document.querySelector(s), KEY='hw-planner-v1';
+const $=s=>document.querySelector(s),KEY='hw-planner-v1',NK='hw-notes',SK='hw-sent';
 const DAYS=['อา','จ','อ','พ','พฤ','ศ','ส'],FULL=['อาทิตย์','จันทร์','อังคาร','พุธ','พฤหัสบดี','ศุกร์','เสาร์'],
 MON=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
-let tasks=load(),view='todo',day=null,editId=null;
-function load(){try{const a=JSON.parse(localStorage.getItem(KEY));return Array.isArray(a)?a:[]}catch{return[]}}
-function save(){try{localStorage.setItem(KEY,JSON.stringify(tasks))}catch{}}
+const ld=(k,d)=>{try{const v=JSON.parse(localStorage.getItem(k));return v==null?d:v}catch{return d}};
+const sv=(k,v)=>{try{localStorage.setItem(k,JSON.stringify(v))}catch{}};
+let tasks=ld(KEY,[]);if(!Array.isArray(tasks))tasks=[];
+let notes=ld(NK,{}),photos=[],view='todo',day=null,editId=null,viewPh=null,urls=[],turls=[],isNew=false;
 const pad=n=>String(n).padStart(2,'0');
 const iso=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
-const dt=s=>new Date(s+'T00:00:00');
-const today=()=>iso(new Date());
+const dt=s=>new Date(s+'T00:00:00'),today=()=>iso(new Date());
 const plus=(s,n)=>{const d=dt(s);d.setDate(d.getDate()+n);return iso(d)};
 const fmt=s=>{const d=dt(s);return `${FULL[d.getDay()]} ${d.getDate()} ${MON[d.getMonth()]}`};
 const hue=s=>{let h=0;for(const c of s)h=(h*31+c.codePointAt(0))%360;return h};
-
+const dueAt=x=>new Date(`${x.due}T${x.time||'23:59'}:00`);
+const diffDays=s=>Math.round((dt(s)-dt(today()))/864e5);
+let mon=new Date();mon=new Date(mon.getFullYear(),mon.getMonth(),1);
 function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!=null)e.textContent=text;return e}
+const save=()=>sv(KEY,tasks);
 
-function render(){
-  const t=today(), open=tasks.filter(x=>!x.done);
-  $('#date').textContent=fmt(t);
-  const late=open.filter(x=>x.due<t).length;
-  $('#sum').textContent=open.length?`ค้างอยู่ ${open.length} งาน`+(late?` เลยกำหนด ${late}`:''):'ไม่มีงานค้าง';
-  const wk=$('#week');wk.replaceChildren();
-  for(let i=0;i<7;i++){
-    const s=plus(t,i),n=open.filter(x=>x.due===s).length,d=dt(s);
-    const b=el('button','d'+(i==0?' today':'')+(n?' has':'')+(day===s?' sel':''));
-    b.append(el('small',0,DAYS[d.getDay()]),el('b',0,d.getDate()),el('i',0,n||''));
-    b.onclick=()=>{day=day===s?null:s;render()};
-    wk.append(b);
-  }
-  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===view));
-  let rows=tasks.filter(x=>view==='done'?x.done:!x.done);
-  if(day)rows=rows.filter(x=>x.due===day);
-  rows.sort((a,b)=>view==='done'?b.due.localeCompare(a.due):a.due.localeCompare(b.due));
-  const list=$('#list');list.replaceChildren();
-  if(!rows.length){list.append(el('div','empty',view==='done'?'ยังไม่มีงานที่ทำเสร็จ':day?'วันนี้ไม่มีงานส่ง กด + เพื่อเพิ่ม':'ยังไม่มีการบ้าน กด + เพื่อเพิ่มงานแรก'));return}
-  const groups=[];
-  for(const r of rows){
-    const key=view==='done'?'done':r.due<t?'late':r.due;
-    let g=groups.find(x=>x.key===key);
-    if(!g){g={key,items:[]};groups.push(g)}
-    g.items.push(r);
-  }
-  for(const g of groups){
-    const sec=el('section','grp'+(g.key==='late'?' late':'')),h=el('h2');
-    if(g.key==='done')h.append('ทำเสร็จแล้ว');
-    else if(g.key==='late')h.append('เลยกำหนด');
-    else{const nm=g.key===t?'วันนี้':g.key===plus(t,1)?'พรุ่งนี้':fmt(g.key);h.append(nm);if(nm!==fmt(g.key))h.append(el('span',0,fmt(g.key)))}
-    sec.append(h);
-    for(const r of g.items){
-      const it=el('div','item'+(r.done?' done':''));
-      const c=el('button','chk','✓');c.setAttribute('aria-label',r.done?'ยกเลิกเสร็จ':'ทำเสร็จแล้ว');
-      c.onclick=()=>{r.done=!r.done;save();render()};
-      const b=el('button','body');b.append(el('span','t',r.title));
-      if(r.subject){const tg=el('span','tag',r.subject);tg.style.background=`hsl(${hue(r.subject)} 55% 40%)`;b.append(tg)}
-      if(g.key==='late'||g.key==='done')b.append(el('span','sub',' '+fmt(r.due)));
-      b.onclick=()=>openTask(r.id);
-      it.append(c,b);sec.append(it);
-    }
-    list.append(sec);
-  }
+/* รูปภาพ: เก็บใน IndexedDB */
+const db=new Promise((ok,no)=>{try{const r=indexedDB.open('hw-photos',1);r.onupgradeneeded=()=>r.result.createObjectStore('p',{keyPath:'id'});r.onsuccess=()=>ok(r.result);r.onerror=()=>no()}catch(e){no(e)}});
+const tx=async(m,f)=>{const d=await db;return new Promise((ok,no)=>{const t=d.transaction('p',m),q=f(t.objectStore('p'));t.oncomplete=()=>ok(q&&q.result);t.onerror=()=>no()})};
+const loadPh=async()=>{try{photos=await tx('readonly',s=>s.getAll())||[]}catch{photos=[]}};
+async function shrink(f){
+  const bm=await createImageBitmap(f),k=Math.min(1,1280/Math.max(bm.width,bm.height));
+  const c=document.createElement('canvas');c.width=Math.round(bm.width*k);c.height=Math.round(bm.height*k);
+  c.getContext('2d').drawImage(bm,0,0,c.width,c.height);
+  return new Promise(ok=>c.toBlob(ok,'image/jpeg',.72));
 }
 
+/* แจ้งเตือน */
+const soonList=()=>tasks.filter(x=>!x.done&&dueAt(x)-Date.now()<3*864e5);
+const canNotif='Notification' in window;
+async function notify(title,body){try{const r=await navigator.serviceWorker.ready;await r.showNotification(title,{body,icon:'icon-192.png',badge:'icon-192.png'})}catch{}}
+async function check(){
+  const n=soonList().length;
+  try{if(navigator.setAppBadge)n?navigator.setAppBadge(n):navigator.clearAppBadge()}catch{}
+  if(!canNotif||Notification.permission!=='granted')return;
+  const sent=ld(SK,{});let ch=false;
+  for(const x of tasks){
+    if(x.done)continue;const ms=dueAt(x)-Date.now(),base=`${x.id}|${x.due}|${x.time}`;
+    if(ms>0&&ms<=3*864e5&&!sent[base+'|3d']){sent[base+'|3d']=1;ch=true;notify('ใกล้ส่งการบ้านแล้ว',`${x.title} ส่ง ${fmt(x.due)} ${x.time||''}`)}
+    if(ms<=0&&ms>-864e5&&!sent[base+'|0']){sent[base+'|0']=1;ch=true;notify('ถึงเวลาส่งการบ้าน',x.title)}
+  }
+  if(ch)sv(SK,sent);
+}
+function banner(){
+  const b=$('#bn'),sn=soonList();b.replaceChildren();
+  const parts=[];
+  if(sn.length)parts.push(`ใกล้ส่งภายใน 3 วัน ${sn.length} งาน: ${sn.slice(0,2).map(x=>x.title).join(', ')}${sn.length>2?'...':''}`);
+  if(canNotif&&Notification.permission==='default')parts.push('เปิดแจ้งเตือนเพื่อรับการเตือน');
+  if(!canNotif)parts.push('เปิดแอปจากไอคอนบนหน้าจอโฮมเพื่อใช้แจ้งเตือน');
+  b.classList.toggle('on',parts.length>0);
+  if(!parts.length)return;
+  b.append(parts.join(' · '));
+  if(canNotif&&Notification.permission==='default'){const bt=el('button',0,'เปิด');bt.onclick=askNotif;b.append(bt)}
+}
+async function askNotif(){
+  if(!canNotif)return alert('เปิดแอปจากไอคอนบนหน้าจอโฮมก่อน แล้วลองอีกครั้ง');
+  try{await Notification.requestPermission()}catch{}
+  if(Notification.permission==='denied')alert('แจ้งเตือนถูกปิดอยู่ ไปที่ ตั้งค่า > แจ้งเตือน > การบ้าน เพื่อเปิด');
+  check();render();
+}
+
+/* ปฏิทิน iPhone (.ics) */
+const esc=s=>String(s).replace(/[\\;,]/g,'\\$&').replace(/\n/g,' ');
+const stamp=d=>iso(d).replace(/-/g,'')+'T'+pad(d.getHours())+pad(d.getMinutes())+'00';
+function ics(list){
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HomeworkPlanner//TH','CALSCALE:GREGORIAN'];
+  const ts=new Date().toISOString().replace(/[-:]|\.\d{3}/g,'');
+  for(const x of list){
+    const s=dueAt(x),e=new Date(s.getTime()+36e5);
+    L.push('BEGIN:VEVENT',`UID:${x.id}@hwplanner`,`DTSTAMP:${ts}`,`DTSTART:${stamp(s)}`,`DTEND:${stamp(e)}`,
+      `SUMMARY:ส่งการบ้าน: ${esc(x.title)}${x.subject?' ('+esc(x.subject)+')':''}`,
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:ใกล้ส่งการบ้านอีก 3 วัน','TRIGGER:-P3D','END:VALARM',
+      'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:ถึงเวลาส่งการบ้าน','TRIGGER:PT0S','END:VALARM','END:VEVENT');
+  }
+  L.push('END:VCALENDAR');return L.join('\r\n');
+}
+async function toCal(list){
+  if(!list.length)return alert('ไม่มีงานค้างให้เพิ่ม');
+  const text=ics(list),f=new File([text],'homework.ics',{type:'text/calendar'});
+  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e.name==='AbortError')return}
+  window.open(URL.createObjectURL(new Blob([text],{type:'text/calendar'})));
+}
+
+/* แสดงผล */
+function mkItem(r,showDate){
+  const it=el('div','item'+(r.done?' done':'')),dd=diffDays(r.due);
+  const c=el('button','chk','✓');c.setAttribute('aria-label',r.done?'ยกเลิกเสร็จ':'ทำเสร็จแล้ว');
+  c.onclick=()=>{r.done=!r.done;save();render();check()};
+  const b=el('button','body');b.append(el('span','t',r.title));
+  if(r.subject){const tg=el('span','tag',r.subject);tg.style.setProperty('--c',`hsl(${hue(r.subject)} 65% 50%)`);b.append(tg)}
+  const when=(showDate?fmt(r.due)+' ':'')+(r.time||'');
+  const soon=!r.done&&dd>=0&&dd<=3,lab=dd===0?'วันนี้':`อีก ${dd} วัน`;
+  b.append(el('span','sub',' '+when));
+  const pc=photos.filter(p=>p.taskId===r.id).length;if(pc)b.append(el('span','sub',' 📷'+pc));
+  if(soon)b.append(el('span','soon',' '+lab));
+  b.onclick=()=>openTask(r.id);
+  it.append(c,b);return it;
+}
+function head(label,sub,kind,emo,n){const h=el('h2');h.append(el('b','lab '+(kind||'day'),(emo||'📅')+' '+label));if(sub)h.append(el('span',0,sub));if(n)h.append(el('span','cnt',n+' งาน'));return h}
+function renderList(){
+  const t=today(),lim=plus(t,30),m=$('#main');m.className='ruled';
+  let rows=tasks.filter(x=>view==='done'?x.done:!x.done),hidden=0;
+  if(view==='todo'){const n=rows.length;rows=rows.filter(x=>x.due<=lim);hidden=n-rows.length}
+  rows.sort((a,b)=>view==='done'?dueAt(b)-dueAt(a):dueAt(a)-dueAt(b));
+  if(!rows.length)m.append(el('div','empty',view==='done'?'ยังไม่มีงานที่ทำเสร็จ':'ยังไม่มีการบ้านใน 30 วันนี้ กด + เพื่อจดงาน'));
+  const gs=[];
+  for(const r of rows){const k=view==='done'?'done':r.due<t?'late':r.due;let g=gs.find(x=>x.k===k);if(!g)gs.push(g={k,a:[]});g.a.push(r)}
+  for(const g of gs){
+    const s=el('section','grp'+(g.k==='late'?' late':''));
+    if(g.k==='done')s.append(head('ทำเสร็จแล้ว','','ok','🎉',g.a.length));
+    else if(g.k==='late')s.append(head('เลยกำหนด','','late','😱',g.a.length));
+    else{const nm=g.k===t?'วันนี้':g.k===plus(t,1)?'พรุ่งนี้':fmt(g.k);s.append(head(nm,nm!==fmt(g.k)?fmt(g.k):'',g.k===t?'today':g.k===plus(t,1)?'tom':'day',g.k===t?'🌟':g.k===plus(t,1)?'🌈':'📅',g.a.length))}
+    g.a.forEach(r=>s.append(mkItem(r,g.k==='late'||g.k==='done')));m.append(s);
+  }
+  if(hidden)m.append(el('div','empty',`อีก ${hidden} งานเกิน 30 วัน ดูได้ในปฏิทิน`));
+}
+function renderCal(){
+  const m=$('#main');m.className='';const t=today(),y=mon.getFullYear(),mo=mon.getMonth();
+  if(!day)day=t;
+  const nav=el('div','mnav'),pv=el('button',0,'‹'),nx=el('button',0,'›');
+  pv.setAttribute('aria-label','เดือนก่อน');nx.setAttribute('aria-label','เดือนถัดไป');
+  pv.onclick=()=>{mon=new Date(y,mo-1,1);render()};nx.onclick=()=>{mon=new Date(y,mo+1,1);render()};
+  nav.append(pv,el('b',0,`${MON[mo]} ${y+543}`),nx);
+  const g=el('div','cal');DAYS.forEach(d=>g.append(el('div','h',d)));
+  const first=new Date(y,mo,1).getDay(),n=new Date(y,mo+1,0).getDate();
+  for(let i=0;i<first;i++)g.append(el('div'));
+  const open=tasks.filter(x=>!x.done);
+  for(let d=1;d<=n;d++){
+    const s=iso(new Date(y,mo,d)),c=open.filter(x=>x.due===s).length,hp=photos.some(p=>p.date===s&&!p.taskId)||notes[s];
+    const b=el('button','c'+(s===t?' today':'')+(s===day?' sel':''));
+    b.append(el('b',0,d),el('i',0,'•'.repeat(Math.min(c,3))+(hp?'📷':'')));
+    b.onclick=()=>{day=s;render()};g.append(b);
+  }
+  m.append(nav,g);
+  const dv=el('section','day');dv.append(head(fmt(day),'',day===t?'today':'day',day===t?'🌟':'📅'));
+  const ts=tasks.filter(x=>x.due===day).sort((a,b)=>dueAt(a)-dueAt(b));
+  if(!ts.length)dv.append(el('p','none','ไม่มีงานส่งวันนี้'));
+  ts.forEach(r=>{const it=mkItem(r,false);it.style.paddingRight='0';dv.append(it)});
+  const lb=el('label',0,'โน้ตของวัน'),ta=el('textarea');ta.value=notes[day]||'';ta.placeholder='จดอะไรไว้ก็ได้';
+  ta.oninput=()=>{if(ta.value)notes[day]=ta.value;else delete notes[day];sv(NK,notes)};
+  const pl=el('label','btn photo','📷 ถ่ายภาพ / เลือกรูป'),fi=el('input');fi.type='file';fi.accept='image/*';fi.multiple=true;fi.hidden=true;
+  fi.onchange=async()=>{await addPhotos(fi.files,day);render()};
+  pl.append(fi);
+  const th=el('div','thumbs');urls.forEach(URL.revokeObjectURL);urls=[];
+  photos.filter(p=>p.date===day&&!p.taskId).forEach(p=>{
+    const u=URL.createObjectURL(p.blob);urls.push(u);const im=el('img');im.src=u;im.alt='รูปโน้ต';
+    im.onclick=()=>{viewPh=p;$('#ph-img').src=u;$('#ov-ph').classList.add('open')};th.append(im);
+  });
+  dv.append(lb,ta,pl,th);m.append(dv);
+}
+function render(){
+  const open=tasks.filter(x=>!x.done),sn=soonList().length;
+  $('#date').textContent=fmt(today());
+  $('#sum').textContent=open.length?`ค้างอยู่ ${open.length} งาน`+(sn?` ใกล้ส่ง ${sn}`:''):'ไม่มีงานค้าง';
+  document.querySelectorAll('.tab').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===view));
+  banner();$('#main').replaceChildren();
+  view==='cal'?renderCal():renderList();
+}
+
+/* ฟอร์ม */
 function openTask(id){
-  editId=id;const r=tasks.find(x=>x.id===id);
+  const r=tasks.find(x=>x.id===id);isNew=!r;editId=r?id:Date.now().toString(36)+Math.random().toString(36).slice(2,4);
   $('#ft').textContent=r?'แก้ไขการบ้าน':'เพิ่มการบ้าน';
   $('#f-title').value=r?r.title:'';$('#f-sub').value=r?r.subject:'';
-  $('#f-due').value=r?r.due:(day||plus(today(),1));
-  $('#f-del').style.display=r?'':'none';
-  const subs=[...new Set(tasks.map(x=>x.subject).filter(Boolean))];
-  $('#subs').replaceChildren(...subs.map(s=>{const o=el('option');o.value=s;return o}));
-  $('#ov-task').classList.add('open');
+  $('#f-due').value=r?r.due:(view==='cal'&&day?day:plus(today(),1));
+  $('#f-time').value=r?(r.time||'23:59'):'18:00';
+  $('#f-del').style.display=r?'':'none';$('#f-ics').style.display=r?'':'none';
+  $('#subs').replaceChildren(...[...new Set(tasks.map(x=>x.subject).filter(Boolean))].map(s=>{const o=el('option');o.value=s;return o}));
+  renderTaskPh();$('#ov-task').classList.add('open');
   if(!r)setTimeout(()=>$('#f-title').focus(),50);
 }
-const closeAll=()=>document.querySelectorAll('.ov').forEach(o=>o.classList.remove('open'));
+async function delPhotosOf(id){try{for(const p of photos.filter(p=>p.taskId===id))await tx('readwrite',s=>s.delete(p.id));await loadPh()}catch{}}
+function closeAll(){
+  if($('#ov-task').classList.contains('open')&&isNew&&!tasks.some(x=>x.id===editId)&&photos.some(p=>p.taskId===editId))delPhotosOf(editId).then(render);
+  document.querySelectorAll('.ov').forEach(o=>o.classList.remove('open'));
+}
+async function addPhotos(files,date,taskId){
+  try{for(const f of files){const blob=await shrink(f);await tx('readwrite',s=>s.put({id:Date.now()+Math.random().toString(36).slice(2,6),date,taskId,blob}))}await loadPh()}
+  catch{alert('บันทึกรูปไม่สำเร็จ ลองใหม่อีกครั้ง')}
+}
+function showPh(p,u){viewPh=p;$('#ph-img').src=u;$('#ov-ph').classList.add('open')}
+function renderTaskPh(){
+  const c=$('#f-ph');c.replaceChildren();turls.forEach(URL.revokeObjectURL);turls=[];
+  photos.filter(p=>p.taskId===editId).forEach(p=>{const u=URL.createObjectURL(p.blob);turls.push(u);const im=el('img');im.src=u;im.alt='รูปแนบ';im.onclick=()=>showPh(p,u);c.append(im)});
+}
 $('#add').onclick=()=>openTask(null);
 $('#f-cancel').onclick=closeAll;
-document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)closeAll()}));
+document.querySelectorAll('.ov').forEach(o=>o.addEventListener('click',e=>{if(e.target===o)o.id==='ov-ph'?o.classList.remove('open'):closeAll()}));
 $('#form').onsubmit=e=>{
   e.preventDefault();
-  const v={title:$('#f-title').value.trim(),subject:$('#f-sub').value.trim(),due:$('#f-due').value};
+  const v={title:$('#f-title').value.trim(),subject:$('#f-sub').value.trim(),due:$('#f-due').value,time:$('#f-time').value||'23:59'};
   if(!v.title||!v.due)return;
   const r=tasks.find(x=>x.id===editId);
-  if(r)Object.assign(r,v);else tasks.push({id:Date.now().toString(36),done:false,...v});
-  save();closeAll();render();
+  if(r)Object.assign(r,v);else tasks.push({id:editId,done:false,...v});
+  save();closeAll();render();check();
 };
-$('#f-del').onclick=()=>{if(confirm('ลบการบ้านนี้?')){tasks=tasks.filter(x=>x.id!==editId);save();closeAll();render()}};
+$('#f-del').onclick=async()=>{if(confirm('ลบการบ้านนี้? (รูปที่แนบไว้จะถูกลบด้วย)')){const id=editId;tasks=tasks.filter(x=>x.id!==id);save();await delPhotosOf(id);closeAll();render()}};
+$('#f-file').onchange=async e=>{await addPhotos(e.target.files,today(),editId);e.target.value='';renderTaskPh();render()};
+$('#f-ics').onclick=()=>{const r=tasks.find(x=>x.id===editId);if(r)toCal([r])};
 document.querySelectorAll('.tab').forEach(b=>b.onclick=()=>{view=b.dataset.v;render()});
+
+$('#ph-close').onclick=()=>$('#ov-ph').classList.remove('open');
+$('#ph-del').onclick=async()=>{if(viewPh&&confirm('ลบรูปนี้?')){await tx('readwrite',s=>s.delete(viewPh.id));await loadPh();$('#ov-ph').classList.remove('open');renderTaskPh();render()}};
 
 $('#bk').onclick=()=>{$('#bk-text').value=JSON.stringify(tasks);$('#ov-bk').classList.add('open')};
 $('#bk-close').onclick=closeAll;
+$('#bk-notif').onclick=askNotif;
+$('#bk-cal').onclick=()=>toCal(tasks.filter(x=>!x.done));
 $('#bk-copy').onclick=async()=>{const t=$('#bk-text');t.select();try{await navigator.clipboard.writeText(t.value);$('#bk-copy').textContent='คัดลอกแล้ว'}catch{document.execCommand('copy')}};
 $('#bk-imp').onclick=()=>{
   try{
     const a=JSON.parse($('#bk-text').value);
     if(!Array.isArray(a)||a.some(x=>!x||!x.title||!x.due))throw 0;
     if(!confirm(`นำเข้า ${a.length} งาน และแทนที่ข้อมูลปัจจุบัน?`))return;
-    tasks=a.map(x=>({id:x.id||Date.now().toString(36)+Math.random().toString(36).slice(2,5),title:String(x.title),subject:String(x.subject||''),due:String(x.due),done:!!x.done}));
-    save();closeAll();render();
+    tasks=a.map(x=>({id:x.id||Date.now().toString(36)+Math.random().toString(36).slice(2,5),title:String(x.title),subject:String(x.subject||''),due:String(x.due),time:String(x.time||'23:59'),done:!!x.done}));
+    save();closeAll();render();check();
   }catch{alert('ข้อมูลไม่ถูกต้อง ลองคัดลอกจากปุ่ม "คัดลอก" ของเครื่องเดิมอีกครั้ง')}
 };
 
-document.addEventListener('visibilitychange',()=>{if(!document.hidden)render()});
-render();
+document.addEventListener('visibilitychange',()=>{if(!document.hidden){render();check()}});
+setInterval(check,60000);
+loadPh().then(()=>{render();check()});render();
 if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
 </script>
 </body>
