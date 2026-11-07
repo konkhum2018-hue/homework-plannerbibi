@@ -196,8 +196,9 @@ async function askNotif(){
 /* ปฏิทิน iPhone (.ics) */
 const esc=s=>String(s).replace(/[\\;,]/g,'\\$&').replace(/\n/g,' ');
 const stamp=d=>iso(d).replace(/-/g,'')+'T'+pad(d.getHours())+pad(d.getMinutes())+'00';
+const fold=l=>{const e=new TextEncoder(),o=[];let cur='',n=0;for(const ch of l){const k=e.encode(ch).length;if(n+k>73){o.push(cur);cur=' '+ch;n=1+k}else{cur+=ch;n+=k}}o.push(cur);return o.join('\r\n')};
 function ics(list){
-  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HomeworkPlanner//TH','CALSCALE:GREGORIAN'];
+  const L=['BEGIN:VCALENDAR','VERSION:2.0','PRODID:-//HomeworkPlanner//TH','CALSCALE:GREGORIAN','METHOD:PUBLISH'];
   const ts=new Date().toISOString().replace(/[-:]|\.\d{3}/g,'');
   for(const x of list){
     const s=dueAt(x),e=new Date(s.getTime()+36e5);
@@ -206,13 +207,21 @@ function ics(list){
       'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:ใกล้ส่งการบ้านอีก 3 วัน','TRIGGER:-P3D','END:VALARM',
       'BEGIN:VALARM','ACTION:DISPLAY','DESCRIPTION:ถึงเวลาส่งการบ้าน','TRIGGER:PT0S','END:VALARM','END:VEVENT');
   }
-  L.push('END:VCALENDAR');return L.join('\r\n');
+  L.push('END:VCALENDAR');return L.map(fold).join('\r\n')+'\r\n';
 }
 async function toCal(list){
   if(!list.length)return alert('ไม่มีงานค้างให้เพิ่ม');
-  const text=ics(list),f=new File([text],'homework.ics',{type:'text/calendar'});
-  try{if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e.name==='AbortError')return}
-  window.open(URL.createObjectURL(new Blob([text],{type:'text/calendar'})));
+  const text=ics(list);
+  /* วิธีหลัก: ให้ service worker เสิร์ฟไฟล์ .ics จริง (Content-Type: text/calendar) iPhone จะเด้งหน้าต่างเพิ่มลงปฏิทินเอง */
+  try{
+    const c=await caches.open('hw-ics');
+    await c.put('./homework.ics',new Response(text,{headers:{'Content-Type':'text/calendar; charset=utf-8'}}));
+    location.href='./homework.ics';
+    return;
+  }catch(e){}
+  /* สำรอง: แชร์เป็นไฟล์ */
+  try{const f=new File([text],'homework.ics',{type:'text/calendar'});if(navigator.canShare&&navigator.canShare({files:[f]})){await navigator.share({files:[f]});return}}catch(e){if(e.name==='AbortError')return}
+  location.href='data:text/calendar;charset=utf-8,'+encodeURIComponent(text);
 }
 
 /* แสดงผล */
